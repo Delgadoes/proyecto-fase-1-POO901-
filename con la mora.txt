@@ -1,0 +1,141 @@
+DROP DATABASE IF EXISTS biblioteca;
+CREATE DATABASE biblioteca CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci;
+USE biblioteca;
+
+-- Tabla de CDs
+CREATE TABLE cds (
+  id INT NOT NULL AUTO_INCREMENT,
+  titulo VARCHAR(255) NOT NULL,
+  artista VARCHAR(255) NOT NULL,
+  genero VARCHAR(100) NOT NULL,
+  ano_publicacion INT NOT NULL,
+  ubicacion_fisica VARCHAR(255) NOT NULL,
+  cantidad_total INT NOT NULL,
+  cantidad_prestados INT DEFAULT 0 CHECK (cantidad_prestados >= 0),
+  PRIMARY KEY (id)
+);
+
+-- Tabla de Configuración de Mora
+CREATE TABLE configuracion_mora (
+  id INT NOT NULL AUTO_INCREMENT,
+  anio VARCHAR(4) NOT NULL,
+  mora_diaria DECIMAL(5,2) NOT NULL,
+  PRIMARY KEY (id)
+);
+
+-- Tabla de Libros
+CREATE TABLE libros (
+  id INT NOT NULL AUTO_INCREMENT,
+  titulo VARCHAR(255) NOT NULL,
+  autor VARCHAR(255) NOT NULL,
+  editorial VARCHAR(255) NOT NULL,
+  isbn VARCHAR(20) NOT NULL UNIQUE,
+  ano_publicacion INT NOT NULL,
+  ubicacion_fisica VARCHAR(255) NOT NULL,
+  cantidad_total INT NOT NULL,
+  cantidad_prestados INT DEFAULT 0 CHECK (cantidad_prestados >= 0),
+  PRIMARY KEY (id)
+);
+
+-- Tabla de Obras
+CREATE TABLE obras (
+  id INT NOT NULL AUTO_INCREMENT,
+  titulo VARCHAR(255) NOT NULL,
+  artista VARCHAR(255) NOT NULL,
+  ano_creacion INT NOT NULL,
+  genero VARCHAR(100) NOT NULL,
+  ubicacion_fisica VARCHAR(255) NOT NULL,
+  cantidad_total INT NOT NULL,
+  cantidad_prestados INT DEFAULT 0 CHECK (cantidad_prestados >= 0),
+  PRIMARY KEY (id)
+);
+
+-- Tabla de Usuarios
+CREATE TABLE usuarios (
+  id INT NOT NULL AUTO_INCREMENT,
+  nombre VARCHAR(100) NOT NULL,
+  usuario VARCHAR(50) NOT NULL UNIQUE,
+  contraseña VARCHAR(255) NOT NULL,
+  privilegio VARCHAR(20) NOT NULL,
+  PRIMARY KEY (id)
+);
+
+-- Insertar usuarios de prueba
+INSERT INTO usuarios (id, nombre, usuario, contraseña, privilegio) VALUES 
+(1, 'Admin', 'admin', 'admin123', 'Administrador'),
+(3, 'Alumno Prueba', 'alumno', 'alumno', 'ALUMNO'),
+(4, 'Tatiana Sanchez', 'tsanchez', 'tsanchez', 'PROFESOR'),
+(5, 'Antonio Lopez', 'antonio', 'antonio', 'ADMINISTRADOR');
+
+-- Tabla de Préstamos con columna "mora"
+CREATE TABLE prestamos (
+  id INT NOT NULL AUTO_INCREMENT,
+  id_ejemplar INT NOT NULL,
+  tipo_ejemplar VARCHAR(50) NOT NULL,
+  fecha_prestamo DATE NOT NULL,
+  fecha_devolucion DATE DEFAULT NULL,
+  mora DECIMAL(10,2) DEFAULT 0.00 CHECK (mora >= 0),
+  id_usuario INT NOT NULL,
+  PRIMARY KEY (id),
+  KEY (id_usuario),
+  CONSTRAINT prestamos_ibfk_1 FOREIGN KEY (id_usuario) REFERENCES usuarios (id) ON DELETE CASCADE
+);
+
+-- Tabla de Revistas
+CREATE TABLE revistas (
+  id INT NOT NULL AUTO_INCREMENT,
+  titulo VARCHAR(255) NOT NULL,
+  editorial VARCHAR(255) NOT NULL,
+  isbn VARCHAR(20) NOT NULL UNIQUE,
+  ano_publicacion INT NOT NULL,
+  ubicacion_fisica VARCHAR(255) NOT NULL,
+  cantidad_total INT NOT NULL,
+  cantidad_prestados INT DEFAULT 0 CHECK (cantidad_prestados >= 0),
+  PRIMARY KEY (id)
+);
+
+-- Tabla de Tesis
+CREATE TABLE tesis (
+  id INT NOT NULL AUTO_INCREMENT,
+  titulo VARCHAR(255) NOT NULL,
+  autor VARCHAR(255) NOT NULL,
+  año INT NOT NULL,
+  universidad VARCHAR(255) NOT NULL,
+  ubicacion_fisica VARCHAR(255) NOT NULL,
+  cantidad_total INT NOT NULL,
+  cantidad_prestados INT DEFAULT 0 CHECK (cantidad_prestados >= 0),
+  PRIMARY KEY (id)
+);
+
+
+
+
+
+INSERT INTO cds (titulo, artista, genero, ano_publicacion, ubicacion_fisica, cantidad_total, cantidad_prestados) VALUES
+('Thriller', 'Michael Jackson', 'Pop', 1982, 'Estante A1', 5, 1),
+('Back in Black', 'AC/DC', 'Rock', 1980, 'Estante A2', 3, 0),
+('Dark Side of the Moon', 'Pink Floyd', 'Rock', 1973, 'Estante A3', 4, 2);
+
+-- 📚 Insertar Libros
+INSERT INTO libros (titulo, autor, editorial, isbn, ano_publicacion, ubicacion_fisica, cantidad_total, cantidad_prestados) VALUES
+('Cien Años de Soledad', 'Gabriel García Márquez', 'Editorial Sudamericana', '9780060883287', 1967, 'Estante B1', 10, 2),
+('1984', 'George Orwell', 'Secker & Warburg', '9780451524935', 1949, 'Estante B2', 8, 1),
+('El Quijote', 'Miguel de Cervantes', 'Francisco de Robles', '9788423979452', 1605, 'Estante B3', 5, 0);
+
+-- 🎨 Insertar Obras
+INSERT INTO obras (titulo, artista, ano_creacion, genero, ubicacion_fisica, cantidad_total, cantidad_prestados) VALUES
+('La Noche Estrellada', 'Vincent van Gogh', 1889, 'Postimpresionismo', 'Galería 1', 2, 0),
+('El Grito', 'Edvard Munch', 1893, 'Expresionismo', 'Galería 2', 1, 0),
+('La Gioconda', 'Leonardo da Vinci', 1503, 'Renacimiento', 'Galería 3', 1, 0);
+
+-- 🗞️ Insertar Revistas
+INSERT INTO revistas (titulo, editorial, isbn, ano_publicacion, ubicacion_fisica, cantidad_total, cantidad_prestados) VALUES
+('National Geographic', 'National Geographic Society', '9781426202131', 1888, 'Estante C1', 10, 2),
+('TIME', 'Time USA, LLC', '9781618930867', 1923, 'Estante C2', 8, 1),
+('Scientific American', 'Springer Nature', '9781441974884', 1845, 'Estante C3', 5, 0);
+
+-- 📑 Insertar Tesis
+INSERT INTO tesis (titulo, autor, año, universidad, ubicacion_fisica, cantidad_total, cantidad_prestados) VALUES
+('Inteligencia Artificial en la Educación', 'Ana Pérez', 2020, 'Universidad Nacional', 'Estante D1', 3, 1),
+('Impacto del Cambio Climático', 'Luis Torres', 2018, 'Universidad de los Andes', 'Estante D2', 4, 0),
+('Nanotecnología y sus Aplicaciones', 'Marta López', 2021, 'Universidad Politécnica', 'Estante D3', 2, 0);
