@@ -89,6 +89,31 @@ public class SolicitarPrestamo extends javax.swing.JFrame {
 
 private void realizarPrestamo(int ejemplarId, Date fechaPrestamo, String tipoEjemplar) {
     int idUsuario = obtenerIdUsuario();
+
+
+
+    String verificarPrestamoQuery = "SELECT COUNT(*) AS prestamos_activos "
+                              + "FROM prestamos "
+                              + "WHERE id_ejemplar = ? AND tipo_ejemplar = ? AND id_usuario = ? AND fecha_devolucion IS NULL";
+
+try (Connection conn = ConexionBD.getConnection();
+     PreparedStatement verificarStmt = conn.prepareStatement(verificarPrestamoQuery)) {
+    
+    verificarStmt.setInt(1, ejemplarId);
+    verificarStmt.setString(2, tipoEjemplar);
+    verificarStmt.setInt(3, idUsuario);
+    
+    ResultSet rs = verificarStmt.executeQuery();
+    if (rs.next() && rs.getInt("prestamos_activos") > 0) {
+        JOptionPane.showMessageDialog(this, "El usuario ya tiene este ejemplar prestado.", "Error", JOptionPane.ERROR_MESSAGE);
+        return;
+    }
+} catch (SQLException e) {
+    e.printStackTrace();
+    return;
+}
+
+    
     
     // Verificar mora
     if (tieneMora(idUsuario)) {
