@@ -108,6 +108,15 @@ CREATE TABLE tesis (
 );
 
 
+CREATE TABLE configuracion_sistema (
+  id INT NOT NULL AUTO_INCREMENT,
+  dias_antes_mora INT NOT NULL,
+  limite_prestamos INT NOT NULL,
+  PRIMARY KEY (id)
+);
+
+INSERT INTO configuracion_sistema (dias_antes_mora, limite_prestamos) VALUES (30, 2);
+
 
 
 
