@@ -14,6 +14,7 @@ public class ConsultarEjemplaresAlumno extends javax.swing.JFrame {
     
     public ConsultarEjemplaresAlumno() {
         initComponents();
+        setLocationRelativeTo(null);
     }
 
     @SuppressWarnings("unchecked")

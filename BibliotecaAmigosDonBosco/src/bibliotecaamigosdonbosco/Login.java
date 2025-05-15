@@ -9,7 +9,9 @@ import java.sql.SQLException;
 public class Login extends javax.swing.JFrame {
 
     public Login() {
+        
         initComponents();
+        setLocationRelativeTo(null);
     }
 
     @SuppressWarnings("unchecked")
@@ -165,15 +167,15 @@ public class Login extends javax.swing.JFrame {
                     // Iniciar sesión exitoso, abrir la ventana correspondiente
                     switch (tipoUsuario) {
                         case "Administrador":
-                            VentanaAdministrador ventanaAdmin = new VentanaAdministrador();
+                            VentanaAdministrador ventanaAdmin = new VentanaAdministrador();                           
                             ventanaAdmin.setVisible(true);
                             break;
                         case "Profesor":
-                            VentanaProfesor ventanaProf = new VentanaProfesor();
+                            VentanaProfesor ventanaProf = new VentanaProfesor();                           
                             ventanaProf.setVisible(true);
                             break;
                         case "Alumno":
-                            VentanaAlumno ventanaAlumno = new VentanaAlumno();
+                            VentanaAlumno ventanaAlumno = new VentanaAlumno();                            
                             ventanaAlumno.setVisible(true);
                             break;
                         default:
@@ -235,6 +237,7 @@ public class Login extends javax.swing.JFrame {
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 new Login().setVisible(true);
+               
             }
         });
     }

@@ -17,6 +17,7 @@ public class GestionUsuarios extends javax.swing.JFrame {
     public GestionUsuarios() {
         initComponents();
         cargarUsuarios();
+        setLocationRelativeTo(null);
     }
     
     // Método para cargar los usuarios desde la base de datos

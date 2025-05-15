@@ -14,6 +14,7 @@ public class ListarEjemplares extends javax.swing.JFrame {
     public ListarEjemplares() {
         initComponents();
         cargarDatosTabla(); // Cargar los datos al abrir la ventana
+        setLocationRelativeTo(null);
     }
     
     // Método para llenar la tabla con los ejemplares

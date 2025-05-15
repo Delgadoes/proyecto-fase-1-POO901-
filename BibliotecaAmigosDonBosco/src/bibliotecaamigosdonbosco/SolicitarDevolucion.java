@@ -12,6 +12,7 @@ public class SolicitarDevolucion extends javax.swing.JFrame {
 
     public SolicitarDevolucion() {
         initComponents();
+        setLocationRelativeTo(null);
     }
 
     @SuppressWarnings("unchecked")
@@ -346,20 +347,21 @@ private double obtenerTasaMora() {
 
 
 private int obtenerPlazoMaximo(String tipoEjemplar) {
-    switch (tipoEjemplar) {
-        case "Libro":
-            return 30;
-        case "Revista":
-            return 30;
-        case "Tesis":
-            return 30;
-        case "Obra":
-            return 30;
-        case "CD":
-            return 30;
-        default:
-            return 30;  // Plazo genérico
+    int diasAntesMora = 30; // Valor predeterminado en caso de error
+
+    try (Connection conn = ConexionBD.getConnection();
+         PreparedStatement stmt = conn.prepareStatement("SELECT dias_antes_mora FROM configuracion_sistema ORDER BY id DESC LIMIT 1")) {
+        
+        ResultSet rs = stmt.executeQuery();
+        if (rs.next()) {
+            diasAntesMora = rs.getInt("dias_antes_mora");
+        }
+        
+    } catch (SQLException e) {
+        e.printStackTrace();
     }
+    
+    return diasAntesMora;
 }
 
 

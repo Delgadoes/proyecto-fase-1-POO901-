@@ -12,6 +12,7 @@ public class ConsultarEjemplaresAdmin extends javax.swing.JFrame {
 
     public ConsultarEjemplaresAdmin() {
         initComponents();
+        setLocationRelativeTo(null);
     }
 
     @SuppressWarnings("unchecked")
@@ -81,11 +82,11 @@ public class ConsultarEjemplaresAdmin extends javax.swing.JFrame {
                 .addComponent(jScrollPane1)
                 .addContainerGap())
             .addGroup(layout.createSequentialGroup()
-                .addGap(48, 48, 48)
-                .addComponent(btnCerrar, javax.swing.GroupLayout.PREFERRED_SIZE, 151, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGap(47, 47, 47)
                 .addComponent(btnEliminar, javax.swing.GroupLayout.PREFERRED_SIZE, 163, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(74, 74, 74))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(btnCerrar, javax.swing.GroupLayout.PREFERRED_SIZE, 151, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(42, 42, 42))
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
@@ -143,7 +144,8 @@ public class ConsultarEjemplaresAdmin extends javax.swing.JFrame {
 
     private void btnCerrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCerrarActionPerformed
         this.dispose();
-
+       VentanaAdministrador ventanaAdmin = new VentanaAdministrador();                           
+       ventanaAdmin.setVisible(true);
     }//GEN-LAST:event_btnCerrarActionPerformed
 
     private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed
@@ -224,49 +226,65 @@ public class ConsultarEjemplaresAdmin extends javax.swing.JFrame {
     }//GEN-LAST:event_btnBuscarActionPerformed
 
     private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
-       int filaSeleccionada = tablaEjemplares.getSelectedRow();
+    int filaSeleccionada = tablaEjemplares.getSelectedRow();
 
-        if (filaSeleccionada == -1) {
-            JOptionPane.showMessageDialog(this, "Por favor, selecciona un ejemplar para eliminar.", "Error", JOptionPane.ERROR_MESSAGE);
+    if (filaSeleccionada == -1) {
+        JOptionPane.showMessageDialog(this, "Por favor, selecciona un ejemplar para eliminar.", "Error", JOptionPane.ERROR_MESSAGE);
+        return;
+    }
+
+    int idEjemplar = (int) tablaEjemplares.getValueAt(filaSeleccionada, 0);
+    String tipoEjemplar = cbTipoEjemplar.getSelectedItem().toString();
+
+    // Verificar si el ejemplar tiene préstamos activos
+    String prestamosQuery = "SELECT COUNT(*) AS prestamos_activos FROM prestamos WHERE id_ejemplar = ? AND tipo_ejemplar = ? AND fecha_devolucion IS NULL";
+    
+    try (Connection conn = ConexionBD.getConnection();
+         PreparedStatement psPrestamos = conn.prepareStatement(prestamosQuery)) {
+        
+        psPrestamos.setInt(1, idEjemplar);
+        psPrestamos.setString(2, tipoEjemplar);
+        ResultSet rs = psPrestamos.executeQuery();
+        
+        if (rs.next() && rs.getInt("prestamos_activos") > 0) {
+            JOptionPane.showMessageDialog(this, "No se puede eliminar este ejemplar porque tiene préstamos activos.", "Error", JOptionPane.ERROR_MESSAGE);
             return;
         }
 
-        int idEjemplar = (int) tablaEjemplares.getValueAt(filaSeleccionada, 0);
-        String tipoEjemplar = cbTipoEjemplar.getSelectedItem().toString();
+    } catch (SQLException e) {
+        System.out.println("Error al verificar préstamos activos: " + e.getMessage());
+        return;
+    }
 
-        int confirmacion = JOptionPane.showConfirmDialog(this, "¿Estás seguro de que deseas eliminar este ejemplar?", "Confirmar eliminación", JOptionPane.YES_NO_OPTION);
-        if (confirmacion == JOptionPane.NO_OPTION) {
-            return;
-        }
+    // Si no tiene préstamos activos, proceder a eliminar
+    String sql = "";
+    if (tipoEjemplar.equals("Libro")) {
+        sql = "DELETE FROM libros WHERE id = ?";
+    } else if (tipoEjemplar.equals("Revista")) {
+        sql = "DELETE FROM revistas WHERE id = ?";
+    } else if (tipoEjemplar.equals("Tesis")) {
+        sql = "DELETE FROM tesis WHERE id = ?";
+    } else if (tipoEjemplar.equals("Obra")) {
+        sql = "DELETE FROM obras WHERE id = ?";
+    } else if (tipoEjemplar.equals("CD")) {
+        sql = "DELETE FROM cds WHERE id = ?";
+    }
 
-        String sql = "";
-        if (tipoEjemplar.equals("Libro")) {
-            sql = "DELETE FROM libros WHERE id = ?";
-        } else if (tipoEjemplar.equals("Revista")) {
-            sql = "DELETE FROM revistas WHERE id = ?";
-        } else if (tipoEjemplar.equals("Tesis")) {
-            sql = "DELETE FROM tesis WHERE id = ?";
-        } else if (tipoEjemplar.equals("Obra")) {
-            sql = "DELETE FROM obras WHERE id = ?";
-        } else if (tipoEjemplar.equals("CD")) {
-            sql = "DELETE FROM CDs WHERE id = ?";
+    try (Connection conn = ConexionBD.getConnection();
+         PreparedStatement pst = conn.prepareStatement(sql)) {
+        pst.setInt(1, idEjemplar);
+        int filasAfectadas = pst.executeUpdate();
+        if (filasAfectadas > 0) {
+            JOptionPane.showMessageDialog(this, "El ejemplar ha sido eliminado correctamente.");
+            DefaultTableModel model = (DefaultTableModel) tablaEjemplares.getModel();
+            model.setRowCount(0);
+            actualizarTabla(tipoEjemplar, txtBuscar.getText().trim());
+        } else {
+            JOptionPane.showMessageDialog(this, "No se pudo eliminar el ejemplar.", "Error", JOptionPane.ERROR_MESSAGE);
         }
-
-        try (Connection conn = ConexionBD.getConnection();
-             PreparedStatement pst = conn.prepareStatement(sql)) {
-            pst.setInt(1, idEjemplar);
-            int filasAfectadas = pst.executeUpdate();
-            if (filasAfectadas > 0) {
-                JOptionPane.showMessageDialog(this, "El ejemplar ha sido eliminado correctamente.");
-                DefaultTableModel model = (DefaultTableModel) tablaEjemplares.getModel();
-                model.setRowCount(0);
-                actualizarTabla(tipoEjemplar, txtBuscar.getText().trim());
-            } else {
-                JOptionPane.showMessageDialog(this, "No se pudo eliminar el ejemplar.", "Error", JOptionPane.ERROR_MESSAGE);
-            }
-        } catch (SQLException e) {
-            System.out.println("Error al eliminar el ejemplar: " + e.getMessage());
-        }
+    } catch (SQLException e) {
+        System.out.println("Error al eliminar el ejemplar: " + e.getMessage());
+    }
     
     }//GEN-LAST:event_btnEliminarActionPerformed
 

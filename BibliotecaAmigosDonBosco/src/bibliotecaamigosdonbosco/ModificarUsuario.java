@@ -10,6 +10,7 @@ public class ModificarUsuario extends javax.swing.JFrame {
 
     public ModificarUsuario() {
         initComponents();
+        setLocationRelativeTo(null);
     }
     
     public void setDatos(int id, String nombre, String usuario, String privilegio) {

@@ -12,6 +12,7 @@ public class SolicitarPrestamo extends javax.swing.JFrame {
 
     public SolicitarPrestamo() {
         initComponents();
+        setLocationRelativeTo(null);
     }
     
     private void actualizarEjemplaresDisponibles(String tipoEjemplar) {
@@ -89,9 +90,7 @@ public class SolicitarPrestamo extends javax.swing.JFrame {
 
 private void realizarPrestamo(int ejemplarId, Date fechaPrestamo, String tipoEjemplar) {
     int idUsuario = obtenerIdUsuario();
-
-
-
+    
     String verificarPrestamoQuery = "SELECT COUNT(*) AS prestamos_activos "
                               + "FROM prestamos "
                               + "WHERE id_ejemplar = ? AND tipo_ejemplar = ? AND id_usuario = ? AND fecha_devolucion IS NULL";
@@ -112,8 +111,6 @@ try (Connection conn = ConexionBD.getConnection();
     e.printStackTrace();
     return;
 }
-
-    
     
     // Verificar mora
     if (tieneMora(idUsuario)) {
@@ -160,18 +157,34 @@ try (Connection conn = ConexionBD.getConnection();
 
 
 private boolean tieneMora(int idUsuario) {
-    String query = "SELECT COUNT(*) AS mora FROM prestamos WHERE id_usuario = ? AND fecha_devolucion IS NULL AND fecha_prestamo < DATE_SUB(CURDATE(), INTERVAL 30 DAY)";
+  String diasMoraQuery = "SELECT dias_antes_mora FROM configuracion_sistema ORDER BY id DESC LIMIT 1";
+    int diasAntesMora = 30;  // Valor predeterminado en caso de error
 
     try (Connection conn = ConexionBD.getConnection();
-         PreparedStatement ps = conn.prepareStatement(query)) {
-        ps.setInt(1, idUsuario);
-        ResultSet rs = ps.executeQuery();
-        if (rs.next()) {
-            return rs.getInt("mora") > 0;
+         PreparedStatement psDias = conn.prepareStatement(diasMoraQuery)) {
+        
+        ResultSet rsDias = psDias.executeQuery();
+        if (rsDias.next()) {
+            diasAntesMora = rsDias.getInt("dias_antes_mora");
         }
+
+        // Consulta para verificar si el usuario tiene préstamos con mora
+        String moraQuery = "SELECT COUNT(*) AS mora FROM prestamos WHERE id_usuario = ? AND fecha_devolucion IS NULL AND fecha_prestamo < DATE_SUB(CURDATE(), INTERVAL ? DAY)";
+        
+        try (PreparedStatement psMora = conn.prepareStatement(moraQuery)) {
+            psMora.setInt(1, idUsuario);
+            psMora.setInt(2, diasAntesMora);
+            ResultSet rsMora = psMora.executeQuery();
+            
+            if (rsMora.next()) {
+                return rsMora.getInt("mora") > 0;
+            }
+        }
+        
     } catch (SQLException e) {
         e.printStackTrace();
     }
+    
     return false;
 }
 
@@ -300,8 +313,21 @@ private int contarPrestamosActivos(int idUsuario) {
 
    
  private int obtenerLimitePrestamos(int idUsuario) {
-    // Asumimos que solo los alumnos pueden realizar préstamos
-    return 3;
+    int limitePrestamos = 2; // Valor predeterminado en caso de error
+    
+    try (Connection conn = ConexionBD.getConnection();
+         PreparedStatement stmt = conn.prepareStatement("SELECT limite_prestamos FROM configuracion_sistema ORDER BY id DESC LIMIT 1")) {
+        
+        ResultSet rs = stmt.executeQuery();
+        if (rs.next()) {
+            limitePrestamos = rs.getInt("limite_prestamos");
+        }
+        
+    } catch (SQLException e) {
+        e.printStackTrace();
+    }
+    
+    return limitePrestamos;
 }
 
 

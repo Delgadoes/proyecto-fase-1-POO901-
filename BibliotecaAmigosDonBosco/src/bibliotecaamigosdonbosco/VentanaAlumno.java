@@ -5,6 +5,7 @@ public class VentanaAlumno extends javax.swing.JFrame {
 
     public VentanaAlumno() {
         initComponents();
+        setLocationRelativeTo(null);
     }
 
     @SuppressWarnings("unchecked")

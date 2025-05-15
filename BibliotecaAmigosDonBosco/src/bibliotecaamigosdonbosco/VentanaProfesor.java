@@ -9,6 +9,7 @@ public class VentanaProfesor extends javax.swing.JFrame {
 
     public VentanaProfesor() {
         initComponents();
+        setLocationRelativeTo(null);
     }
 
     @SuppressWarnings("uncheck")

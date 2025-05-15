@@ -4,19 +4,33 @@ package bibliotecaamigosdonbosco;
 public class VentanaAdministrador extends javax.swing.JFrame {
 
     public VentanaAdministrador() {
+        
         initComponents();
+        setLocationRelativeTo(null);
     }
 
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jButton1 = new javax.swing.JButton();
+        jButton2 = new javax.swing.JButton();
+        jButton3 = new javax.swing.JButton();
+        jButton4 = new javax.swing.JButton();
         TITULO = new javax.swing.JLabel();
         btnGestionarUsuarios = new java.awt.Button();
         btnAgregarEjemplares = new java.awt.Button();
         btnConfigurarMora = new java.awt.Button();
         btnSalir = new java.awt.Button();
         btnConsultarEjemplaresAdmin = new java.awt.Button();
+
+        jButton1.setText("jButton1");
+
+        jButton2.setText("jButton2");
+
+        jButton3.setText("jButton3");
+
+        jButton4.setText("jButton4");
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -38,7 +52,8 @@ public class VentanaAdministrador extends javax.swing.JFrame {
             }
         });
 
-        btnConfigurarMora.setLabel("CONFIGURAR MORA");
+        btnConfigurarMora.setActionCommand("CONFIGURACION MORA Y DIAS ");
+        btnConfigurarMora.setLabel("CONFIGURACION MORA Y DIAS ");
         btnConfigurarMora.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnConfigurarMoraActionPerformed(evt);
@@ -78,11 +93,12 @@ public class VentanaAdministrador extends javax.swing.JFrame {
                         .addGap(74, 74, 74)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(btnConsultarEjemplaresAdmin, javax.swing.GroupLayout.PREFERRED_SIZE, 280, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(btnConfigurarMora, javax.swing.GroupLayout.PREFERRED_SIZE, 280, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(210, 210, 210)
-                        .addComponent(btnSalir, javax.swing.GroupLayout.PREFERRED_SIZE, 280, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(btnConfigurarMora, javax.swing.GroupLayout.PREFERRED_SIZE, 280, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addContainerGap(58, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addComponent(btnSalir, javax.swing.GroupLayout.PREFERRED_SIZE, 280, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(216, 216, 216))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -97,9 +113,9 @@ public class VentanaAdministrador extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(btnAgregarEjemplares, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnConsultarEjemplaresAdmin, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(42, 42, 42)
+                .addGap(24, 24, 24)
                 .addComponent(btnSalir, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(26, Short.MAX_VALUE))
+                .addContainerGap(44, Short.MAX_VALUE))
         );
 
         pack();
@@ -108,6 +124,7 @@ public class VentanaAdministrador extends javax.swing.JFrame {
     private void btnGestionarUsuariosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGestionarUsuariosActionPerformed
         // Aquí abriremos la ventana de gestionar usuarios
     GestionUsuarios gestionUsuarios = new GestionUsuarios();
+    
     gestionUsuarios.setVisible(true);
     }//GEN-LAST:event_btnGestionarUsuariosActionPerformed
 
@@ -126,6 +143,7 @@ public class VentanaAdministrador extends javax.swing.JFrame {
 
     private void btnConfigurarMoraActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConfigurarMoraActionPerformed
         // Abrir la ventana de ConfigurarMora
+        this.dispose();
     ConfigurarMora configurarMora = new ConfigurarMora();
     configurarMora.setVisible(true);
 
@@ -133,6 +151,7 @@ public class VentanaAdministrador extends javax.swing.JFrame {
 
     private void btnConsultarEjemplaresAdminActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConsultarEjemplaresAdminActionPerformed
         // Abrir la ventana de AgregarEjemplares
+        this.dispose();
     ConsultarEjemplaresAdmin consultarEjemplaresAdmin = new ConsultarEjemplaresAdmin();
 
     // Mostrar la ventana
@@ -181,5 +200,9 @@ public class VentanaAdministrador extends javax.swing.JFrame {
     private java.awt.Button btnConsultarEjemplaresAdmin;
     private java.awt.Button btnGestionarUsuarios;
     private java.awt.Button btnSalir;
+    private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton2;
+    private javax.swing.JButton jButton3;
+    private javax.swing.JButton jButton4;
     // End of variables declaration//GEN-END:variables
 }

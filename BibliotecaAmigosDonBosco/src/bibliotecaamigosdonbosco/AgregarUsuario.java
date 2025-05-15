@@ -12,6 +12,7 @@ public class AgregarUsuario extends javax.swing.JFrame {
      */
     public AgregarUsuario() {
         initComponents();
+        setLocationRelativeTo(null);
     }
 
     /**

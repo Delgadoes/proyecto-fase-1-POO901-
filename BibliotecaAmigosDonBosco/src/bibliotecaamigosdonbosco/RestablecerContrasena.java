@@ -20,6 +20,7 @@ public class RestablecerContrasena extends javax.swing.JFrame {
      */
     public RestablecerContrasena() {
         initComponents();
+        setLocationRelativeTo(null);
     }
 // Método para restablecer la contraseña
     private void restablecerContrasena(String usuario, String nuevaContraseña) {
