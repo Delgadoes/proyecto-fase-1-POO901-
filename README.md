@@ -2,22 +2,23 @@ SISTEMA DE GESTIÓN DE BIBLIOTECA - COLEGIO AMIGOS DE DON BOSCO
 =============================================================
 
 1. DESCRIPCIÓN
---------------
+
 Sistema desktop para gestión integral de biblioteca que permite:
 - Registrar y consultar libros, revistas, tesis, CDs y obras
 - Controlar préstamos a alumnos y profesores
 - Generar reportes de mora y disponibilidad
-
-2. EQUIPO DE DESARROLLO
 -----------------------
+2. EQUIPO DE DESARROLLO
+
 Integrantes:
 1. Jeferson Alfredo Romero Rivas - RR222321
 2. Jonathan Alexander Alberto Cruz - AC200739
 3. David Roberto Ferrer Coto - FC243112
 4. Angel Marcelo Delgado Estrada - DE241507
 
+-----------------------
 3. ROLES DE USUARIO
--------------------
+
 - ADMINISTRADOR:
   * Gestiona usuarios y ejemplares
   * Configura sistema y moras
@@ -27,9 +28,9 @@ Integrantes:
 - ALUMNO:
   * Autoconsulta
   * Solicitud de préstamos
-
+-----------------------
 4. MÓDULOS PRINCIPALES
-----------------------
+
 4.1 Gestión de Usuarios
   - Registro/Edición de usuarios
   - Restablecimiento de contraseñas
@@ -47,9 +48,10 @@ Integrantes:
     * Estado de mora
     * Disponibilidad
   - Cálculo de mora diaria
-
+    
+-----------------------
 5. INSTALACIÓN
---------------
+
 Requisitos:
 - Java JDK 8+
 - MySQL 5.7+
