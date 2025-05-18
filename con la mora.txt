@@ -23,6 +23,16 @@ CREATE TABLE configuracion_mora (
   PRIMARY KEY (id)
 );
 
+INSERT INTO configuracion_mora (anio, mora_diaria) VALUES
+('2024', 5.00),
+('2025', 5.00),
+('2026', 5.00),
+('2027', 5.00),
+('2028', 5.00),
+('2029', 5.00),
+('2030', 5.00);
+
+
 -- Tabla de Libros
 CREATE TABLE libros (
   id INT NOT NULL AUTO_INCREMENT,
