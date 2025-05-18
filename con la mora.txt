@@ -1,6 +1,6 @@
-DROP DATABASE IF EXISTS biblioteca;
-CREATE DATABASE biblioteca CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci;
-USE biblioteca;
+DROP DATABASE IF EXISTS biblioteca11;
+CREATE DATABASE biblioteca11 CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci;
+USE biblioteca11;
 
 -- Tabla de CDs
 CREATE TABLE cds (
