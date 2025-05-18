@@ -24,7 +24,6 @@ Integrantes:
   * Configura sistema y moras
 - PROFESOR:
   * Consultas avanzadas
-  * Préstamos extendidos
 - ALUMNO:
   * Autoconsulta
   * Solicitud de préstamos
